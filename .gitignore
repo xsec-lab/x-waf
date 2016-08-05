@@ -2,4 +2,4 @@
 .vscode
 server
 app.conf
-.iml
+*.iml

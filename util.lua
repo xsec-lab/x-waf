@@ -68,7 +68,7 @@ function _M.get_rule_files(rules_path)
     return rule_files
 end
 
--- Get WAF rules when in init phase
+-- Load WAF rules into table when on nginx's init phase
 function _M.get_rules(rules_path)
     local rule_files = _M.get_rule_files(rules_path)
     if rule_files == {} then
@@ -91,15 +91,6 @@ function _M.get_rules(rules_path)
         ngx.log(ngx.INFO, string.format("rule_name:%s, value:%s", rule_name, t_rule))
         _M.RULE_TABLE[rule_name] = t_rule
     end
---    for k, v in pairs(_M.RULE_TABLE)
---    do
---        ngx.log(ngx.INFO, string.format("%s Rule Set", k))
---        for kk, vv in pairs(v)
---        do
---            ngx.log(ngx.INFO, string.format("index:%s, Rule:%s", kk, vv))
---        end
---
---    end
     return(_M.RULE_TABLE)
 end
 
