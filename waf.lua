@@ -35,7 +35,7 @@ function _M.load_rules()
     for k, v in pairs(_M.RULES)
     do
         ngx.log(ngx.INFO, string.format("%s Rule Set", k))
-        for kk, vv in pairs(_M.RULES['whiteip.rule'])
+        for kk, vv in pairs(v)
         do
             ngx.log(ngx.INFO, string.format("index:%s, Rule:%s", kk, vv))
         end
@@ -255,10 +255,10 @@ function _M.check()
     if _M.white_ip_check() then
     elseif _M.black_ip_check() then
     elseif _M.user_agent_attack_check() then
-    elseif _M.cc_attack_check() then
-    elseif _M.cookie_attack_check() then
     elseif _M.white_url_check() then
     elseif _M.url_attack_check() then
+    elseif _M.cc_attack_check() then
+    elseif _M.cookie_attack_check() then
     elseif _M.url_args_attack_check() then
     elseif _M.post_attack_check() then
     else

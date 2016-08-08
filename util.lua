@@ -21,14 +21,23 @@ THE SOFTWARE.
 ]]
 
 local io = require("io")
-local lfs = require("lfs")
 local cjson = require("cjson.safe")
 local string = require("string")
 local config = require("config")
 
 local _M = {
     version = "0.1",
-    RULE_TABLE = {}
+    RULE_TABLE = {},
+    RULE_FILES = {
+        "args.rule",
+        "blackip.rule",
+        "cookie.rule",
+        "post.rule",
+        "url.rule",
+        "useragent.rule",
+        "whiteip.rule",
+        "whiteUrl.rule"
+    }
 }
 
 -- Get the client IP
@@ -55,11 +64,25 @@ function _M.get_user_agent()
     return USER_AGENT
 end
 
+-- Get all rule file name by lfs
+--function _M.get_rule_files(rules_path)
+--local lfs = require("lfs")
+--    local rule_files = {}
+--    for file in lfs.dir(rules_path) do
+--        if file ~= "." and file ~= ".." then
+--            local file_name = rules_path .. '/' .. file
+--            ngx.log(ngx.DEBUG, string.format("rule key:%s, rule file name:%s", file, file_name))
+--            rule_files[file] = file_name
+--        end
+--    end
+--    return rule_files
+--end
+
 -- Get all rule file name
 function _M.get_rule_files(rules_path)
     local rule_files = {}
-    for file in lfs.dir(rules_path) do
-        if file ~= "." and file ~= ".." then
+    for _, file in ipairs(_M.RULE_FILES) do
+        if file ~= "" then
             local file_name = rules_path .. '/' .. file
             ngx.log(ngx.DEBUG, string.format("rule key:%s, rule file name:%s", file, file_name))
             rule_files[file] = file_name
