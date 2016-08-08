@@ -40,6 +40,46 @@ local _M = {
     }
 }
 
+-- Get all rule file name
+function _M.get_rule_files(rules_path)
+    local rule_files = {}
+    for _, file in ipairs(_M.RULE_FILES) do
+        if file ~= "" then
+            local file_name = rules_path .. '/' .. file
+            ngx.log(ngx.DEBUG, string.format("rule key:%s, rule file name:%s", file, file_name))
+            rule_files[file] = file_name
+        end
+    end
+    return rule_files
+end
+
+
+-- Load WAF rules into table when on nginx's init phase
+function _M.get_rules(rules_path)
+    local rule_files = _M.get_rule_files(rules_path)
+    if rule_files == {} then
+        return nil
+    end
+
+    for rule_name, rule_file in pairs(rule_files) do
+        local t_rule = {}
+        local file_rule_name = io.open(rule_file)
+        local json_rules = file_rule_name:read("*a")
+        file_rule_name:close()
+        local table_rules = cjson.decode(json_rules)
+        if table_rules ~= nil then
+            ngx.log(ngx.INFO, string.format("%s:%s", table_rules, type(table_rules)))
+            for _, table_name in pairs(table_rules) do
+                -- ngx.log(ngx.INFO, string.format("Insert table:%s, value:%s", t_rule, table_name["RuleItem"]))
+                table.insert(t_rule, table_name["RuleItem"])
+            end
+        end
+        ngx.log(ngx.INFO, string.format("rule_name:%s, value:%s", rule_name, t_rule))
+        _M.RULE_TABLE[rule_name] = t_rule
+    end
+    return(_M.RULE_TABLE)
+end
+
 -- Get the client IP
 function _M.get_client_ip()
     local CLIENT_IP = ngx.req.get_headers()["X_real_ip"]
@@ -77,45 +117,6 @@ end
 --    end
 --    return rule_files
 --end
-
--- Get all rule file name
-function _M.get_rule_files(rules_path)
-    local rule_files = {}
-    for _, file in ipairs(_M.RULE_FILES) do
-        if file ~= "" then
-            local file_name = rules_path .. '/' .. file
-            ngx.log(ngx.DEBUG, string.format("rule key:%s, rule file name:%s", file, file_name))
-            rule_files[file] = file_name
-        end
-    end
-    return rule_files
-end
-
--- Load WAF rules into table when on nginx's init phase
-function _M.get_rules(rules_path)
-    local rule_files = _M.get_rule_files(rules_path)
-    if rule_files == {} then
-        return nil
-    end
-
-    for rule_name, rule_file in pairs(rule_files) do
-        local t_rule = {}
-        local file_rule_name = io.open(rule_file)
-        local json_rules = file_rule_name:read("*a")
-        file_rule_name:close()
-        local table_rules = cjson.decode(json_rules)
-        if table_rules ~= nil then
-            ngx.log(ngx.INFO, string.format("%s:%s", table_rules, type(table_rules)))
-            for _, table_name in pairs(table_rules) do
-                -- ngx.log(ngx.INFO, string.format("Insert table:%s, value:%s", t_rule, table_name["RuleItem"]))
-                table.insert(t_rule, table_name["RuleItem"])
-            end
-        end
-        ngx.log(ngx.INFO, string.format("rule_name:%s, value:%s", rule_name, t_rule))
-        _M.RULE_TABLE[rule_name] = t_rule
-    end
-    return(_M.RULE_TABLE)
-end
 
 -- WAF log record for json
 function _M.log_record(config_log_dir, method, url, data, ruletag)
