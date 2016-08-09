@@ -76,7 +76,6 @@ go get github.com/go-sql-driver/mysql
 go get github.com/go-xorm/xorm
 go get github.com/xsec-lab/x-waf-admin
 ```
-
 1. 从github中下载最新的版本
 1. 执行go build server.go编译出二进制版本，然后将server、conf、publib和templates目录一起打包上传到服务器中即可运行。
 
