@@ -69,6 +69,7 @@ make && sudo make install
 
 1.  首先需要搭建好go语言开发环境，可以参考[Go Web 编程](https://github.com/astaxie/build-web-application-with-golang/blob/master/zh/01.1.md)
 1. 安装依赖包
+
 ```bash
 go get gopkg.in/macaron.v1
 go get gopkg.in/ini.v1
