@@ -83,6 +83,6 @@ go get github.com/xsec-lab/x-waf-admin
 ## 致谢
 
 1. 感谢春哥开源的[openresty](https://openresty.org)
-1. 感谢[https://github.com/unixhot/waf](https://github.com/unixhot/waf)开源的waf
+1. 感谢unixhot开源的[waf](https://github.com/unixhot/waf)
 1. 感谢无闻开源的[macron](https://go-macaron.com/)和[peach](https://peachdocs.org/)
 1. 感谢lunny开源的[xorm](https://github.com/go-xorm/xorm)
