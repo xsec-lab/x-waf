@@ -103,6 +103,11 @@ function _M.get_user_agent()
     end
     return USER_AGENT
 end
+-- get server's host
+function _M.get_server_host()
+    local host = ngx.req.get_headers()["Host"]
+    return host
+end
 
 -- Get all rule file name by lfs
 --function _M.get_rule_files(rules_path)

@@ -250,6 +250,15 @@ function _M.post_attack_check()
     return false
 end
 
+-- start change to jinghuashuiyue mode, set in vhosts's location segument
+function _M.start_jingshuishuiyue()
+    local host = util.get_server_host()
+    ngx.var.target = string.format("proxy_%s", host)
+    if host and _M.bad_guy_check() then
+        ngx.var.target = string.format("unreal_%s", host)
+    end
+end
+
 -- waf start
 function _M.check()
     if _M.white_ip_check() then
