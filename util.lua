@@ -82,7 +82,13 @@ end
 
 -- Get the client IP
 function _M.get_client_ip()
-    local CLIENT_IP = ngx.req.get_headers()["X_real_ip"]
+    local CLIENT_IP = ngx.req.get_headers()["Client_Ip"]
+    if CLIENT_IP == nil then
+        CLIENT_IP = ngx.req.get_headers()["Cdn_Src_Ip"]
+    end
+    if CLIENT_IP == nil then
+        CLIENT_IP = ngx.req.get_headers()["X_Real_Ip"]
+    end
     if CLIENT_IP == nil then
         CLIENT_IP = ngx.req.get_headers()["X_Forwarded_For"]
     end
