@@ -32,9 +32,9 @@ local _M = {
     -- enable/disable white url
     config_white_url_check = "on",
     -- enable/disable white ip
-    config_white_ip_check = "off",
+    config_white_ip_check = "on",
     -- enable/disable block ip
-    config_black_ip_check = "off",
+    config_black_ip_check = "on",
     -- enable/disable url filtering
     config_url_check = "on",
     -- enalbe/disable url args filtering
@@ -46,18 +46,18 @@ local _M = {
     -- enable/disable cc filtering
     config_cc_check = "on",
     -- cc rate the xxx of xxx seconds
-    config_cc_rate = "10/60",
+    config_cc_rate = "30/60",
     -- enable/disable post filtering
     config_post_check = "on",
     -- config waf output redirect/html/jinghuashuiyue
     config_waf_model = "html",
     -- if config_waf_output ,setting url
-    config_waf_redirect_url = "http://xsec.io",
+    config_waf_redirect_url = "http://lab.acgdraw.com",
     config_expire_time = 600,
     config_output_html=[[
       <meta charset="utf-8"/><pre>
 
-      错误代码：MA-SEC-MAID403
+      错误代码：MA-SEC-MAID401
 
       错误描述：您的操作未被授权，欢迎在遵守白帽子职业道德准则的前提
                 下进行相关的安全测试。同时欢迎在网站首页右下角的反馈

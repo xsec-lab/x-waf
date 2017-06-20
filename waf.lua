@@ -25,6 +25,7 @@ local unescape = ngx.unescape_uri
 
 local config = require("config")
 local util = require("util")
+local iputils = require("iputils")
 
 local _M = {
     RULES = {}
@@ -55,7 +56,7 @@ function _M.white_ip_check()
         local WHITE_IP = util.get_client_ip()
         if IP_WHITE_RULE ~= nil then
             for _, rule in pairs(IP_WHITE_RULE) do
-                if rule ~= "" and rulematch(WHITE_IP, rule, "jo") then
+                if rule ~= "" and iputils.ip_in_cidr(WHITE_IP, rule) then
                     util.log_record(config.config_log_dir,'White_IP', ngx.var_request_uri, "_", "_")
                     return true
                 end
@@ -85,7 +86,7 @@ function _M.black_ip_check()
         local BLACK_IP = util.get_client_ip()
         if IP_BLACK_RULE ~= nil then
             for _, rule in pairs(IP_BLACK_RULE) do
-                if rule ~= "" and rulematch(BLACK_IP, rule, "jo") then
+                if rule ~= "" and iputils.ip_in_cidr(BLACK_IP, rule) then
                     util.log_record(config.config_log_dir,'BlackList_IP', ngx.var_request_uri, "_", "_")
                     if config.config_waf_enable == "on" then
                         ngx.exit(403)

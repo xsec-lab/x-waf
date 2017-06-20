@@ -1,1 +1,1 @@
-[{"Id":74,"RuleType":"whiteip","RuleItem":"8.8.8.8"}]
+[{"Id":74,"RuleType":"whiteip","RuleItem":"8.8.0.0/16"}]

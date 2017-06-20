@@ -1,4 +1,4 @@
-# X-WAF
+# X-WAF 萌绘图站定制版
 
 X-WAF是一款适用中、小企业的云WAF系统，让中、小企业也可以非常方便地拥有自己的免费云WAF。
 
@@ -86,3 +86,6 @@ go get github.com/xsec-lab/x-waf-admin
 1. 感谢unixhot开源的[waf](https://github.com/unixhot/waf)
 1. 感谢无闻开源的[macron](https://go-macaron.com/)和[peach](https://peachdocs.org/)
 1. 感谢lunny开源的[xorm](https://github.com/go-xorm/xorm)
+1. 感谢小米安全团队开源的[x-waf](https://waf.xsec.io/)
+1. 感谢hamishforbes开源的[iputils](https://github.com/hamishforbes/lua-resty-iputils)
+
