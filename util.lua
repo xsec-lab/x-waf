@@ -125,7 +125,7 @@ end
 
 -- WAF log record for json
 function _M.log_record(config_log_dir, method, url, data, ruletag)
-    local log_path = config_log_dir
+    local log_path = config_log_dir..'/'..method
     local client_IP = _M.get_client_ip()
     local user_agent = _M.get_user_agent()
     local server_name = ngx.var.server_name
@@ -140,10 +140,18 @@ function _M.log_record(config_log_dir, method, url, data, ruletag)
         req_data = data,
         rule_tag = ruletag,
     }
-
+    local file_path = io.open(log_path, "rb")
+    if file_path then
+        file_path:close()
+    else
+        os.execute('mkdir -p '..log_path)
+    end
+    
     local log_line = cjson.encode(log_json_obj)
     local log_name = string.format("%s/%s_waf.log", log_path, ngx.today())
-    local file = io.open(log_name, "a")
+    
+    local file,err = io.open(log_name, "a+")
+    if err ~= nil then ngx.log(ngx.DEBUG, "file err:"..err) end
     if file == nil then
         return
     end
