@@ -231,12 +231,15 @@ function _M.post_attack_check()
         local POST_RULES = _M.get_rule('post.rule')
         for _, rule in pairs(POST_RULES) do
             local POST_ARGS = ngx.req.get_post_args() or {}
-            for _, v in pairs(POST_ARGS) do
+            for k, v in pairs(POST_ARGS) do
                 local post_data = ""
                 if type(v) == "table" then
                     post_data = table.concat(v, ", ")
                 else
-                    post_data = v
+                    if type(v) == "boolean" then
+                        post_data = k -- 检查Json类型数据,原来这里是个bug
+                    else
+                        post_data = v
                 end
                 if rule ~= "" and rulematch(post_data, rule, "jo") then
                     util.log_record(config.config_log_dir,'Deny_USER_POST_DATA', post_data, "-", rule)
