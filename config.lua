@@ -45,6 +45,8 @@ local _M = {
     config_cookie_check = "on",
     -- enable/disable cc filtering
     config_cc_check = "on",
+    -- cc token store mode ipurl/ip
+    config_cc_mode = "ipurl",
     -- cc rate the xxx of xxx seconds
     config_cc_rate = "30/60",
     -- enable/disable post filtering
