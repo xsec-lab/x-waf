@@ -126,7 +126,7 @@ function _M.cc_attack_check()
             if req > CCcount then
                 util.log_record(config.config_log_dir,'CC_Attack', ngx.var.request_uri, "-", "-")
                 if config.config_waf_enable == "on" then
-                    ngx.exit(403)
+                    ngx.exit(444)
                 end
             else
                 limit:incr(CC_TOKEN, 1)
