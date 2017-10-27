@@ -240,6 +240,7 @@ function _M.post_attack_check()
                         post_data = k -- 检查Json类型数据,原来这里是个bug
                     else
                         post_data = v
+                    end
                 end
                 if rule ~= "" and rulematch(post_data, rule, "jo") then
                     util.log_record(config.config_log_dir,'Deny_USER_POST_DATA', post_data, "-", rule)
