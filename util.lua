@@ -161,7 +161,9 @@ end
 
 -- WAF response
 function _M.waf_output()
-    if config.config_waf_model == "redirect" then
+    if config.config_waf_model == "reset" then
+        ngx.exit(444)
+    elseif config.config_waf_model == "redirect" then
         ngx.redirect(config.config_waf_redirect_url, 301)
     elseif config.config_waf_model == "jinghuashuiyue" then
         local bad_guy_ip = _M.get_client_ip()

@@ -51,8 +51,8 @@ local _M = {
     config_cc_rate = "30/60",
     -- enable/disable post filtering
     config_post_check = "on",
-    -- config waf output redirect/html/jinghuashuiyue
-    config_waf_model = "html",
+    -- config waf output reset/redirect/html/jinghuashuiyue
+    config_waf_model = "reset",
     -- if config_waf_output ,setting url
     config_waf_redirect_url = "http://lab.acgdraw.com",
     config_expire_time = 600,
