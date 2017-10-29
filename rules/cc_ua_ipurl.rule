@@ -1,1 +1,1 @@
-[{"Id":332,"RuleType":"useragent","RuleItem":"(ipurl_mode_ua1|ipurl_mode_ua2)"}]
+[{"Id":332,"RuleType":"cc_ua_ipurl","RuleItem":"(ipurl_mode_ua1|ipurl_mode_ua2)"}]
