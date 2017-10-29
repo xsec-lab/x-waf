@@ -117,13 +117,29 @@ end
 function _M.cc_attack_check()
     if config.config_cc_check == "on" then
         local ATTACK_URI = ngx.var.uri
-        local CC_TOKEN = util.get_client_ip()
-        if config.config_cc_mode == "ipurl" then
-            CC_TOKEN = util.get_client_ip() .. ATTACK_URI
+        -- check ua whitelist
+        -- if in whitelist then use ip+url only
+        local USER_AGENT_RULES = _M.get_rule('cc_ua_ipurl.rule')
+        local USER_AGENT = ngx.var.http_user_agent
+        local USER_AGENT_WHITE = false
+        if USER_AGENT ~= nil then
+            for _, rule in pairs(USER_AGENT_RULES) do
+                if rule ~= "" and rulematch(USER_AGENT, rule, "jo") then
+                    USER_AGENT_WHITE = true
+                end
+            end
         end
+        -- ip only mode
+        local CC_TOKEN = util.get_client_ip()
         local limit = ngx.shared.limit
-        local CCcount = tonumber(string.match(config.config_cc_rate, '(.*)/'))
-        local CCseconds = tonumber(string.match(config.config_cc_rate, '/(.*)'))
+        local CCcount = tonumber(string.match(config.config_cc_rate_ip, '(.*)/'))
+        local CCseconds = tonumber(string.match(config.config_cc_rate_ip, '/(.*)'))
+        -- ip + url mode
+        if config.config_cc_mode == "ipurl" or USER_AGENT_WHITE then
+            CC_TOKEN = util.get_client_ip() .. ATTACK_URI
+            CCcount = tonumber(string.match(config.config_cc_rate_ipurl, '(.*)/'))
+            CCseconds = tonumber(string.match(config.config_cc_rate_ipurl, '/(.*)'))
+        end
         local req,_ = limit:get(CC_TOKEN)
         if req then
             if req > CCcount then

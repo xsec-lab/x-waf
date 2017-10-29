@@ -32,6 +32,7 @@ local _M = {
         "args.rule",
         "blackip.rule",
         "cookie.rule",
+        "cc_ua_ipurl.rule",
         "post.rule",
         "url.rule",
         "useragent.rule",
