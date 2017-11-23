@@ -44,7 +44,6 @@ function _M.load_rules()
 end
 
 function _M.get_rule(rule_file_name)
-    ngx.log(ngx.DEBUG, rule_file_name)
     return _M.RULES[rule_file_name]
 end
 
