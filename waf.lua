@@ -103,7 +103,7 @@ function _M.white_url_check()
         local URL_WHITE_RULES = _M.get_rule('writeurl.rule')
         local REQ_URI = ngx.var.request_uri
         if URL_WHITE_RULES ~= nil then
-            for _,rule in pairs(URL_WHITE_RULES) do
+            for _, rule in pairs(URL_WHITE_RULES) do
                 if rule ~= "" and rulematch(REQ_URI, rule, "jo") then
                     return true
                 end
@@ -120,7 +120,7 @@ function _M.cc_attack_check()
         local limit = ngx.shared.limit
         local CCcount = tonumber(string.match(config.config_cc_rate, '(.*)/'))
         local CCseconds = tonumber(string.match(config.config_cc_rate, '/(.*)'))
-        local req,_ = limit:get(CC_TOKEN)
+        local req, _ = limit:get(CC_TOKEN)
         if req then
             if req > CCcount then
                 util.log_record(config.config_log_dir, 'CC_Attack', ngx.var.request_uri, "-", "-")
@@ -144,7 +144,7 @@ function _M.cookie_attack_check()
         local USER_COOKIE = ngx.var.http_cookie
         if USER_COOKIE ~= nil then
             for _, rule in pairs(COOKIE_RULES) do
-                if rule ~="" and rulematch(USER_COOKIE, rule, "jo") then
+                if rule ~= "" and rulematch(USER_COOKIE, rule, "jo") then
                     util.log_record(config.config_log_dir, 'Deny_Cookie', ngx.var.request_uri, "-", rule)
                     if config.config_waf_enable == "on" then
                         util.waf_output()
@@ -162,8 +162,8 @@ function _M.url_attack_check()
     if config.config_url_check == "on" then
         local URL_RULES = _M.get_rule('url.rule')
         local REQ_URI = ngx.var.request_uri
-        for _,rule in pairs(URL_RULES) do
-            if rule ~="" and rulematch(REQ_URI,rule,"jo") then
+        for _, rule in pairs(URL_RULES) do
+            if rule ~= "" and rulematch(REQ_URI, rule, "jo") then
                 util.log_record(config.config_log_dir, 'Deny_URL', REQ_URI, "-", rule)
                 if config.config_waf_enable == "on" then
                     util.waf_output()
@@ -179,7 +179,7 @@ end
 function _M.url_args_attack_check()
     if config.config_url_args_check == "on" then
         local ARGS_RULES = _M.get_rule('args.rule')
-        for _,rule in pairs(ARGS_RULES) do
+        for _, rule in pairs(ARGS_RULES) do
             local REQ_ARGS = ngx.req.get_uri_args()
             for key, val in pairs(REQ_ARGS) do
                 ngx.log(ngx.DEBUG, key)
@@ -190,7 +190,7 @@ function _M.url_args_attack_check()
                 else
                     ARGS_DATA = val
                 end
-                if ARGS_DATA and type(ARGS_DATA) ~= "boolean" and rule ~="" and rulematch(unescape(ARGS_DATA), rule, "jo") then
+                if ARGS_DATA and type(ARGS_DATA) ~= "boolean" and rule ~= "" and rulematch(unescape(ARGS_DATA), rule, "jo") then
                     util.log_record(config.config_log_dir, 'Deny_URL_Args', ngx.var.request_uri, "-", rule)
                     if config.config_waf_enable == "on" then
                         util.waf_output()
@@ -230,10 +230,12 @@ function _M.post_attack_check()
         local POST_RULES = _M.get_rule('post.rule')
         for _, rule in pairs(POST_RULES) do
             local POST_ARGS = ngx.req.get_post_args() or {}
-            for _, v in pairs(POST_ARGS) do
+            for k, v in pairs(POST_ARGS) do
                 local post_data = ""
                 if type(v) == "table" then
                     post_data = table.concat(v, ", ")
+                elseif type(v) == "boolean" then
+                    post_data = k
                 else
                     post_data = v
                 end

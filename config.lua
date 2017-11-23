@@ -26,7 +26,7 @@ local _M = {
     -- waf status
     config_waf_enable = "on",
     -- log dir
-    config_log_dir = "/tmp/waf_logs",
+    config_log_dir = "/tmp/",
     -- rule setting
     config_rule_dir = "/usr/local/openresty/nginx/conf/x-waf/rules",
     -- enable/disable white url
@@ -54,85 +54,24 @@ local _M = {
     -- if config_waf_output ,setting url
     config_waf_redirect_url = "http://xsec.io",
     config_expire_time = 600,
-    config_output_html=[[
+    config_output_html = [[
     <html>
     <head>
     <meta charset="UTF-8">
-    <title>xsec waf</title>
-    <style type="text/css">
-        body {
-      font-family: "Helvetica Neue", Helvetica, Arial;
-      font-size: 14px;
-      line-height: 20px;
-      font-weight: 400;
-      color: #3b3b3b;
-      -webkit-font-smoothing: antialiased;
-      font-smoothing: antialiased;
-      background: #f6f6f6;
-    }
-    .wrapper {
-      margin: 0 auto;
-      padding: 40px;
-      max-width: 980px;
-    }
-    .table {
-      margin: 0 0 40px 0;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-      display: table;
-    }
-    @media screen and (max-width: 580px) {
-      .table {
-        display: block;
-      }
-    }
-    .row {
-      display: table-row;
-      background: #f6f6f6;
-    }
-    .row:nth-of-type(odd) {
-      background: #e9e9e9;
-    }
-    .row.header {
-      font-weight: 900;
-      color: #ffffff;
-      background: #ea6153;
-    }
-    .row.green {
-      background: #27ae60;
-    }
-    .row.yellow {
-      background: #FF8C00;
-    }
-    @media screen and (max-width: 580px) {
-      .row {
-        padding: 8px 0;
-        display: block;
-      }
-    }
-    .cell {
-      padding: 6px 12px;
-      display: table-cell;
-    }
-    @media screen and (max-width: 580px) {
-      .cell {
-        padding: 2px 12px;
-        display: block;
-      }
-    }
-    </style>
+    <title>MIDUN WAF</title>
     </head>
       <body>
-        <div class="wrapper">
+        <div>
       <div class="table">
-        <div class="row header yellow">
+        <div>
           <div class="cell">
-            您的IP为 %s
+            您的IP为: %s
           </div>
           <div class="cell">
             欢迎在遵守白帽子道德准则的情况下进行安全测试。
           </div>
           <div class="cell">
-            联系方式：x@xsec.io
+            联系方式：http://xsec.io
           </div>
         </div>
       </div>
