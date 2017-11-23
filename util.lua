@@ -77,7 +77,7 @@ function _M.get_rules(rules_path)
         ngx.log(ngx.INFO, string.format("rule_name:%s, value:%s", rule_name, t_rule))
         _M.RULE_TABLE[rule_name] = t_rule
     end
-    return(_M.RULE_TABLE)
+    return (_M.RULE_TABLE)
 end
 
 -- Get the client IP
@@ -87,10 +87,10 @@ function _M.get_client_ip()
         CLIENT_IP = ngx.req.get_headers()["X_Forwarded_For"]
     end
     if CLIENT_IP == nil then
-        CLIENT_IP  = ngx.var.remote_addr
+        CLIENT_IP = ngx.var.remote_addr
     end
     if CLIENT_IP == nil then
-        CLIENT_IP  = ""
+        CLIENT_IP = ""
     end
     return CLIENT_IP
 end
@@ -103,6 +103,7 @@ function _M.get_user_agent()
     end
     return USER_AGENT
 end
+
 -- get server's host
 function _M.get_server_host()
     local host = ngx.req.get_headers()["Host"]
@@ -124,8 +125,8 @@ end
 --end
 
 -- WAF log record for json
-function _M.log_record(config_log_dir, method, url, data, ruletag)
-    local log_path = config_log_dir..'/'..method
+function _M.log_record(config_log_dir, attack_type, url, data, ruletag)
+    local log_path = config_log_dir
     local client_IP = _M.get_client_ip()
     local user_agent = _M.get_user_agent()
     local server_name = ngx.var.server_name
@@ -135,23 +136,17 @@ function _M.log_record(config_log_dir, method, url, data, ruletag)
         local_time = local_time,
         server_name = server_name,
         user_agent = user_agent,
-        attack_method = method,
+        attack_type = attack_type,
         req_url = url,
         req_data = data,
         rule_tag = ruletag,
     }
-    local file_path = io.open(log_path, "rb")
-    if file_path then
-        file_path:close()
-    else
-        os.execute('mkdir -p '..log_path)
-    end
-    
+
     local log_line = cjson.encode(log_json_obj)
     local log_name = string.format("%s/%s_waf.log", log_path, ngx.today())
-    
-    local file,err = io.open(log_name, "a+")
-    if err ~= nil then ngx.log(ngx.DEBUG, "file err:"..err) end
+
+    local file, err = io.open(log_name, "a+")
+    if err ~= nil then ngx.log(ngx.DEBUG, "file err:" .. err) end
     if file == nil then
         return
     end

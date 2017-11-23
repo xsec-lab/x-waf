@@ -104,7 +104,7 @@ function _M.white_url_check()
         local REQ_URI = ngx.var.request_uri
         if URL_WHITE_RULES ~= nil then
             for _, rule in pairs(URL_WHITE_RULES) do
-                if rule ~= "" and rulematch(REQ_URI, rule, "jo") then
+                if rule ~= "" and rulematch(REQ_URI, rule, "joi") then
                     return true
                 end
             end
@@ -144,8 +144,8 @@ function _M.cookie_attack_check()
         local USER_COOKIE = ngx.var.http_cookie
         if USER_COOKIE ~= nil then
             for _, rule in pairs(COOKIE_RULES) do
-                if rule ~= "" and rulematch(USER_COOKIE, rule, "jo") then
-                    util.log_record(config.config_log_dir, 'Deny_Cookie', ngx.var.request_uri, "-", rule)
+                if rule ~= "" and rulematch(USER_COOKIE, rule, "joi") then
+                    util.log_record(config.config_log_dir, 'Cookie_Attack', ngx.var.request_uri, "-", rule)
                     if config.config_waf_enable == "on" then
                         util.waf_output()
                         return true
@@ -163,8 +163,8 @@ function _M.url_attack_check()
         local URL_RULES = _M.get_rule('url.rule')
         local REQ_URI = ngx.var.request_uri
         for _, rule in pairs(URL_RULES) do
-            if rule ~= "" and rulematch(REQ_URI, rule, "jo") then
-                util.log_record(config.config_log_dir, 'Deny_URL', REQ_URI, "-", rule)
+            if rule ~= "" and rulematch(REQ_URI, rule, "joi") then
+                util.log_record(config.config_log_dir, 'Black_URL', REQ_URI, "-", rule)
                 if config.config_waf_enable == "on" then
                     util.waf_output()
                     return true
@@ -182,16 +182,14 @@ function _M.url_args_attack_check()
         for _, rule in pairs(ARGS_RULES) do
             local REQ_ARGS = ngx.req.get_uri_args()
             for key, val in pairs(REQ_ARGS) do
-                ngx.log(ngx.DEBUG, key)
                 local ARGS_DATA = {}
                 if type(val) == 'table' then
                     ARGS_DATA = table.concat(val, " ")
-                    ngx.log(ngx.DEBUG, ARGS_DATA)
                 else
                     ARGS_DATA = val
                 end
-                if ARGS_DATA and type(ARGS_DATA) ~= "boolean" and rule ~= "" and rulematch(unescape(ARGS_DATA), rule, "jo") then
-                    util.log_record(config.config_log_dir, 'Deny_URL_Args', ngx.var.request_uri, "-", rule)
+                if ARGS_DATA and type(ARGS_DATA) ~= "boolean" and rule ~= "" and rulematch(unescape(ARGS_DATA), rule, "joi") then
+                    util.log_record(config.config_log_dir, 'Get_Attack', ngx.var.request_uri, "-", rule)
                     if config.config_waf_enable == "on" then
                         util.waf_output()
                         return true
@@ -210,8 +208,8 @@ function _M.user_agent_attack_check()
         local USER_AGENT = ngx.var.http_user_agent
         if USER_AGENT ~= nil then
             for _, rule in pairs(USER_AGENT_RULES) do
-                if rule ~= "" and rulematch(USER_AGENT, rule, "jo") then
-                    util.log_record(config.config_log_dir, 'Deny_USER_AGENT', ngx.var.request_uri, "-", rule)
+                if rule ~= "" and rulematch(USER_AGENT, rule, "joi") then
+                    util.log_record(config.config_log_dir, 'Evil_USER_AGENT', ngx.var.request_uri, "-", rule)
                     if config.config_waf_enable == "on" then
                         util.waf_output()
                         return true
@@ -239,8 +237,8 @@ function _M.post_attack_check()
                 else
                     post_data = v
                 end
-                if rule ~= "" and rulematch(post_data, rule, "jo") then
-                    util.log_record(config.config_log_dir, 'Deny_USER_POST_DATA', post_data, "-", rule)
+                if rule ~= "" and rulematch(post_data, rule, "joi") then
+                    util.log_record(config.config_log_dir, 'Post_Attack', post_data, "-", rule)
                     if config.config_waf_enable == "on" then
                         util.waf_output()
                         return true
