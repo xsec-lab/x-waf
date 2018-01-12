@@ -49,6 +49,26 @@ function _M.get_rule(rule_file_name)
     return _M.RULES[rule_file_name]
 end
 
+-- deny referer
+function _M.referer_check()
+    if config.config_referer_check == "on" then
+        local Referer_RULES = _M.get_rule('Referer.rule')
+        local Referer = ngx.var.http_referer
+        if Referer ~= nil then
+            for _, rule in pairs(Referer_RULES) do
+                if rule ~= "" and rulematch(Referer, rule, "jo") then
+                    util.log_record(config.config_log_dir,'Deny_Referer', ngx.var.request_uri, Referer, rule)
+                    if config.config_waf_enable == "on" then
+                        util.waf_output()
+                        return true
+                    end
+                end
+            end
+        end
+    end
+    return false
+end
+
 -- white ip check
 function _M.white_ip_check()
     if config.config_white_ip_check == "on" then
@@ -231,7 +251,7 @@ function _M.user_agent_attack_check()
         if USER_AGENT ~= nil then
             for _, rule in pairs(USER_AGENT_RULES) do
                 if rule ~= "" and rulematch(USER_AGENT, rule, "jo") then
-                    util.log_record('Deny_USER_AGENT', ngx.var.request_uri, "-", rule)
+                    util.log_record(config.config_log_dir,'Deny_USER_AGENT', ngx.var.request_uri, USER_AGENT, rule)
                     if config.config_waf_enable == "on" then
                         util.waf_output()
                         return true
@@ -294,6 +314,7 @@ function _M.check()
     elseif _M.cookie_attack_check() then
     elseif _M.url_args_attack_check() then
     elseif _M.post_attack_check() then
+    elseif _M.referer_check() then
     else
         return
     end

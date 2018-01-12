@@ -29,6 +29,8 @@ local _M = {
     config_log_dir = "/var/log/waf_logs",
     -- rule setting
     config_rule_dir = "/usr/local/openresty/nginx/conf/x-waf/rules",
+    -- enable/disable referer filtering
+    config_referer_check = "on",
     -- enable/disable white url
     config_white_url_check = "on",
     -- enable/disable white ip
